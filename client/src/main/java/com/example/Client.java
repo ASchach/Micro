@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Data
 @Builder
 @Entity
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Client {
     @Id
-    private Integer cpr;
+    private BigInteger cpr;
     private String firstName;
     private String lastName;
     private String address;

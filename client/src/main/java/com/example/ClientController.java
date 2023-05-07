@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public record ClientController(ClientService clientService) {
 
+    @CrossOrigin()
     @PostMapping()
     public void registerClient(@RequestBody ClientRegistrationRequest clientRegistrationRequest) {
         log.info("new client registration {}", clientRegistrationRequest);

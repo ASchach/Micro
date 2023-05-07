@@ -1,9 +1,11 @@
 package com.example;
 
+import java.math.BigInteger;
+
 public record ClientRegistrationRequest(
-         Integer cpr,
-         String firstName,
-         String lastName,
-         String address,
-         Integer birthYear) {
+        BigInteger cpr,
+        String firstName,
+        String lastName,
+        String address,
+        Integer birthYear) {
 }
