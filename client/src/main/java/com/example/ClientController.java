@@ -27,11 +27,21 @@ public record ClientController(ClientService clientService) {
         return clientService.getAllClients();
     }
 
-//DELETE method by CPR for specific client
+//DELETE method by ID for specific client
     @CrossOrigin()
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable int id) {
         log.info("delete client with id {}", id);
         clientService.deleteClient(id);
     }
+
+//PUT method for updating a given client based on ID
+    @CrossOrigin()
+    @PutMapping("/{id}")
+    public void updateClient(@PathVariable int id,
+         @RequestBody ClientUpdateRequest clientUpdateRequest) {
+        log.info("updating client with id {}", id);
+        clientService.updateClient(clientUpdateRequest, id);
+    }
+
 }
