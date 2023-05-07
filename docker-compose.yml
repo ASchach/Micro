@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  client-db:
+    image: mysql:latest
+    ports:
+      - "33061:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=clientpassword
+      - MYSQL_DATABASE=clientdb
+      - MYSQL_USER=clientuser
+      - MYSQL_PASSWORD=clientpassword
+  client:
+    image: "client-image:latest"
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - client-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://client-db:3306/clientdb
+      - SPRING_DATASOURCE_USERNAME=clientuser
+      - SPRING_DATASOURCE_PASSWORD=clientpassword
