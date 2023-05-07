@@ -28,6 +28,7 @@ public record ClientController(ClientService clientService) {
     }
 
 //DELETE method by CPR for specific client
+    @CrossOrigin()
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable int id) {
         log.info("delete client with id {}", id);
