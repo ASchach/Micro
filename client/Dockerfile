@@ -1,5 +1,5 @@
-FROM openjdk:11-jdk-slim
+FROM openjdk:20-jdk-slim
 VOLUME /tmp
-COPY target/classes/com/example/ClientApplication.class app.jar
+COPY target/client-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 
