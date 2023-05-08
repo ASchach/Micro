@@ -1,32 +1,32 @@
 version: '3'
 
 services:
-  client-db:
+  bosted-db:
     image: mysql:latest
     ports:
       - "33061:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=clientpassword
-      - MYSQL_DATABASE=clientdb
-      - MYSQL_USER=clientuser
-      - MYSQL_PASSWORD=clientpassword
+      - MYSQL_ROOT_PASSWORD=bostedpassword
+      - MYSQL_DATABASE=bostedDB
+      - MYSQL_USER=bosteduser
+      - MYSQL_PASSWORD=bostedpassword
     healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u clientuser -pclientpassword" ]
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u bosteduser -pbostedpassword" ]
       interval: 30s
       timeout: 10s
       retries: 5
 
-  client:
-    image: "client-image:latest"
+  bosted:
+    image: "bosted-image:latest"
     build:
-      context: ./client
+      context: ./Bosted
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      client-db:
+      bosted-db:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://client-db:3306/clientdb
-      - SPRING_DATASOURCE_USERNAME=clientuser
-      - SPRING_DATASOURCE_PASSWORD=clientpassword
+      - SPRING_DATASOURCE_URL=jdbc:mysql://bosted-db:3306/bostedDB
+      - SPRING_DATASOURCE_USERNAME=bosteduser
+      - SPRING_DATASOURCE_PASSWORD=bostedpassword

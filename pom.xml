@@ -15,7 +15,7 @@
 	<name>Micro</name>
 	<description>Demo project for Spring Boot</description>
 	<modules>
-		<module>client</module>
+		<module>Bosted</module>
 	</modules>
 	<properties>
 		<java.version>20</java.version>
