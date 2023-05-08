@@ -1,13 +1,12 @@
 server:
   port: 8080
-
 Spring:
   application:
-    name: client
+    name: Bosted
   datasource:
     username: 'root'
-    url: jdbc:mysql://localhost:33061/clientdb
-    password: 'clientpassword'
+    url: jdbc:mysql://localhost:33061/bostedDB
+    password: 'bostedpassword'
   jpa:
     properties:
       hibernate:
