@@ -1,6 +1,8 @@
 package com.example;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.protocol.types.Field;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +15,22 @@ public class ClientController {
     //ClientService object
     private final ClientService clientService;
 
-    //Constructor
+    /*
+    Constructor with only ClientService
     public ClientController(ClientService clientService) {
+      this.clientService = clientService;
+    }
+    */
+
+    //Kafka template object;
+    private KafkaTemplate<String, ClientRegistrationRequest> kafkaTemplate;
+
+    //Constructor with both kafka and clientService
+    public ClientController(
+            ClientService clientService,
+            KafkaTemplate<String, ClientRegistrationRequest> kafkaTemplate) {
         this.clientService = clientService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     //POST method for creating clients
@@ -25,6 +40,7 @@ public class ClientController {
        ClientRegistrationRequest clientRegistrationRequest) {
         log.info("new client registration {}", clientRegistrationRequest);
         clientService.registerClient(clientRegistrationRequest);
+        kafkaTemplate.send("postClient", clientRegistrationRequest);
     }
 
     //GET method for gathering all clients

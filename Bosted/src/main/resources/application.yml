@@ -5,6 +5,10 @@ Spring:
     name: Bosted
   kafka:
     bootstrap-servers: kafka-server:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   datasource:
     username: 'root'
     url: jdbc:mysql://localhost:33061/bostedDB
