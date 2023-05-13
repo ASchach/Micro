@@ -12,7 +12,7 @@ services:
       - MYSQL_PASSWORD=bostedpassword
     healthcheck:
       test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u bosteduser -pbostedpassword" ]
-      interval: 30s
+      interval: 15s
       timeout: 10s
       retries: 5
     networks:
@@ -35,6 +35,41 @@ services:
     networks:
       - zookeeper-kafka
       - bosted-network
+
+  sensum-db:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=sensumpassword
+      - MYSQL_DATABASE=sensumDB
+      - MYSQL_USER=sensumuser
+      - MYSQL_PASSWORD=sensumpassword
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u sensumuser -psensumpassword" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - sensum-network
+
+  sensum:
+    image: "sensum-image:latest"
+    build:
+      context: ./Sensum
+      dockerfile: Dockerfile
+    ports:
+      - "6060:6060"
+    depends_on:
+      sensum-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://sensum-db:3306/sensumDB
+      - SPRING_DATASOURCE_USERNAME=sensumuser
+      - SPRING_DATASOURCE_PASSWORD=sensumpassword
+    networks:
+      - zookeeper-kafka
+      - sensum-network
 
   zookeeper:
     image: docker.io/bitnami/zookeeper:latest
@@ -89,3 +124,4 @@ networks:
   zookeeper-kafka:
     driver: bridge
   bosted-network:
+  sensum-network:

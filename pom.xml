@@ -17,7 +17,8 @@
 	<modules>
 		<module>Bosted</module>
         <module>Kafka</module>
-    </modules>
+		<module>Sensum</module>
+	</modules>
 	<properties>
 		<java.version>20</java.version>
 	</properties>

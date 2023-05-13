@@ -1,0 +1,24 @@
+server:
+  port: 6060
+Spring:
+  application:
+    name: Sensum
+  kafka:
+    bootstrap-servers: kafka-server:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  datasource:
+    username: 'root'
+    url: jdbc:mysql://localhost:44061/sensumDB
+    password: 'sensumpassword'
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: update
+
+    show-sql: 'true'
