@@ -3,15 +3,22 @@ package com.example;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/clients")
 @Slf4j
-public record ClientController(ClientService clientService) {
+public class ClientController {
 
-//POST method for creating clients
+    //ClientService object
+    private final ClientService clientService;
+
+    //Constructor
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
+    //POST method for creating clients
     @CrossOrigin()
     @PostMapping()
     public void registerClient(@RequestBody
@@ -20,14 +27,14 @@ public record ClientController(ClientService clientService) {
         clientService.registerClient(clientRegistrationRequest);
     }
 
-//GET method for gathering all clients
+    //GET method for gathering all clients
     @CrossOrigin()
     @GetMapping()
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
 
-//DELETE method by ID for specific client
+    //DELETE method by ID for specific client
     @CrossOrigin()
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable int id) {
@@ -35,7 +42,7 @@ public record ClientController(ClientService clientService) {
         clientService.deleteClient(id);
     }
 
-//PUT method for updating a given client based on ID
+    //PUT method for updating a given client based on ID
     @CrossOrigin()
     @PutMapping("/{id}")
     public void updateClient(@PathVariable int id,

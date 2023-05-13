@@ -11,10 +11,12 @@ services:
       - MYSQL_USER=bosteduser
       - MYSQL_PASSWORD=bostedpassword
     healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u bosteduser -pbostedpassword" ]
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u bosteduser -pbostedpassword" ]
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      bosted-network:
 
   bosted:
     image: "bosted-image:latest"
@@ -30,3 +32,60 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://bosted-db:3306/bostedDB
       - SPRING_DATASOURCE_USERNAME=bosteduser
       - SPRING_DATASOURCE_PASSWORD=bostedpassword
+    networks:
+      - zookeeper-kafka
+      - bosted-network
+
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+    - zookeeper-kafka
+
+  kafka-server:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9092:9092'
+    volumes:
+      - 'kafka_data:/bitnami'
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-server:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CREATE_TOPICS=test-topic:1:1
+      - KAFKA_OPTS=-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_jaas.conf
+    depends_on:
+      - zookeeper
+    networks:
+      - zookeeper-kafka
+
+  kafka:
+    image: "kafka-image:latest"
+    build:
+      context: ./Kafka
+      dockerfile: Dockerfile
+    ports:
+      - "7070:7070"
+    depends_on:
+      - kafka-server
+    networks:
+      - zookeeper-kafka
+
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+
+
+networks:
+  zookeeper-kafka:
+    driver: bridge
+  bosted-network:
