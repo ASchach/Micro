@@ -4,7 +4,7 @@ Spring:
   application:
     name: Bosted
   kafka:
-    bootstrap-servers: kafka-server:9092
+    bootstrap-servers: kafka-server1:9092, kafka-server2:9093
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
