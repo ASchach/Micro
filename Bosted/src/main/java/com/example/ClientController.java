@@ -50,7 +50,7 @@ public class ClientController {
     public void updateClient(@PathVariable int id,
          @RequestBody ClientUpdateRequest clientUpdateRequest) {
         log.info("updating client with id {}", id);
-        clientService.updateClient(clientUpdateRequest, id);
+        eventPublisher.publishClientUpdateEvent(clientUpdateRequest);
     }
 
 }

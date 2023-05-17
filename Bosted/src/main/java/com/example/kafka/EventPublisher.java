@@ -2,6 +2,7 @@ package com.example.kafka;
 
 import com.example.Client;
 import com.example.ClientRegistrationRequest;
+import com.example.ClientUpdateRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class EventPublisher {
         this.eventPublisher = eventPublisher;
     }
 
-    //ClientRegistration event
+    //ClientRegistration-event publisher
     public void publishClientRegisteredEvent(ClientRegistrationRequest clientRegistrationRequest) {
         ClientRegistrationEvent event = new ClientRegistrationEvent(
                 Client.builder()
@@ -23,13 +24,25 @@ public class EventPublisher {
                         .address(clientRegistrationRequest.address())
                         .birthYear(clientRegistrationRequest.birthYear())
                         .build());
-        System.out.println("Client registration request event published");
         eventPublisher.publishEvent(event);
     }
 
-    //ClientDeletion event
+    //ClientDeletion-event publisher
     public void publishClientDeletionEvent(int id){
         ClientDeletionEvent event = new ClientDeletionEvent(id);
+        eventPublisher.publishEvent(event);
+    }
+
+    //ClientUpdate-event publisher
+    public void publishClientUpdateEvent(ClientUpdateRequest clientUpdateRequest) {
+        ClientUpdateEvent event = new ClientUpdateEvent(
+                Client.builder()
+                        .cpr(clientUpdateRequest.cpr())
+                        .firstName(clientUpdateRequest.firstName())
+                        .lastName(clientUpdateRequest.lastName())
+                        .address(clientUpdateRequest.address())
+                        .birthYear(clientUpdateRequest.birthYear())
+                        .build());
         eventPublisher.publishEvent(event);
     }
 }

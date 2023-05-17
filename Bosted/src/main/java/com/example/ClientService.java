@@ -47,26 +47,18 @@ public record ClientService(ClientRepository clientRepository, EventPublisher ev
 
 
     //Update client from ID
-    public void updateClient(ClientUpdateRequest clientUpdateRequest, int id) {
+    public void updateClient(Client client) {
         try {
-            Optional<Client> optionalClient = clientRepository.findById(id);
-            if (optionalClient.isPresent()) {
-                Client client = optionalClient.get();
-                client.setCpr(clientUpdateRequest.getCpr());
-                client.setFirstName(clientUpdateRequest.getFirstName());
-                client.setLastName(clientUpdateRequest.getLastName());
-                client.setAddress(clientUpdateRequest.getAddress());
-                client.setBirthYear(clientUpdateRequest.getBirthYear());
+            if (clientRepository.existsById(client.getId())){
                 clientRepository.save(client);
             }
             else {
-                System.err.println(
-                        "Client not found with id " + id);
+                System.err.println("The client does not exist");
             }
         }
         catch (Exception ex) {
             System.err.println(
-                    "Error trying to update client with ID: " + id + ex.getMessage());
+                    "Error trying to update client with ID: " + client.getId() + ex.getMessage());
         }
     }
 

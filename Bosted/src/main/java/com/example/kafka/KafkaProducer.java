@@ -26,4 +26,7 @@ public class KafkaProducer {
     public void deleteClient(int id){
         kafkaTemplate2.send("deleteClient", id);
     }
+
+    //Kafka producer for "updateClient" topic
+    public void updateClient(Client client) {kafkaTemplate.send("updateClient", client);}
 }

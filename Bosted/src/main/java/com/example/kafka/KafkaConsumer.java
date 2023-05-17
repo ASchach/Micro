@@ -28,5 +28,12 @@ public class KafkaConsumer {
         System.out.println("Listener received: " + id);
         clientService.deleteClient(id);
     }
+
+    //Kafka consumer for "updateClient" topic
+    @KafkaListener(topics = "updateClient", groupId = "bosted")
+    private void listenUpdate(Client client){
+        System.out.println("Listener received: " + client);
+        clientService.updateClient(client);
+    }
 }
 
