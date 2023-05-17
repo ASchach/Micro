@@ -1,6 +1,4 @@
-package com.example.kafka;
-
-import com.example.Client;
+package com.example.domain.event;
 
 public class ClientDeletionEvent {
     int id;

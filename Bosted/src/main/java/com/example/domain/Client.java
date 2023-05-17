@@ -1,10 +1,11 @@
-package com.example;
+package com.example.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Columns;
 
 import java.math.BigInteger;
 
@@ -24,6 +25,7 @@ public class Client {
             generator = "client_id_sequence"
     )
     private Integer id;
+    @Column(unique = true)
     private BigInteger cpr;
     private String firstName;
     private String lastName;

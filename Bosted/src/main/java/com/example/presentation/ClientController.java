@@ -1,7 +1,9 @@
-package com.example;
+package com.example.presentation;
 
 
-import com.example.kafka.EventPublisher;
+import com.example.domain.Client;
+import com.example.domain.ClientService;
+import com.example.domain.event.EventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -24,7 +26,7 @@ public class ClientController {
     @CrossOrigin()
     @PostMapping()
     public void registerClient(@RequestBody
-       ClientRegistrationRequest clientRegistrationRequest) {
+                               ClientRegistrationRequest clientRegistrationRequest) {
         log.info("new client registration {}", clientRegistrationRequest);
         eventPublisher.publishClientRegisteredEvent(clientRegistrationRequest);
     }

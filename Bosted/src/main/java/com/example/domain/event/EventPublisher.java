@@ -1,8 +1,8 @@
-package com.example.kafka;
+package com.example.domain.event;
 
-import com.example.Client;
-import com.example.ClientRegistrationRequest;
-import com.example.ClientUpdateRequest;
+import com.example.domain.Client;
+import com.example.presentation.ClientRegistrationRequest;
+import com.example.presentation.ClientUpdateRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +37,7 @@ public class EventPublisher {
     public void publishClientUpdateEvent(ClientUpdateRequest clientUpdateRequest) {
         ClientUpdateEvent event = new ClientUpdateEvent(
                 Client.builder()
+                        .id(clientUpdateRequest.id())
                         .cpr(clientUpdateRequest.cpr())
                         .firstName(clientUpdateRequest.firstName())
                         .lastName(clientUpdateRequest.lastName())

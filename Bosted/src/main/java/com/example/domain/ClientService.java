@@ -1,15 +1,15 @@
-package com.example;
+package com.example.domain;
 
-import com.example.kafka.EventPublisher;
+import com.example.domain.Client;
+import com.example.domain.event.EventPublisher;
+import com.example.persistence.ClientRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
 
+import java.util.List;
 
 @Service
 public record ClientService(ClientRepository clientRepository, EventPublisher eventPublisher) {
-
-
 
     //Create client
     public void registerClient(Client client) {
@@ -20,7 +20,6 @@ public record ClientService(ClientRepository clientRepository, EventPublisher ev
             System.err.println("Error trying to register client: " + ex.getMessage());
         }
     }
-
 
     //Get all clients
     public List<Client> getAllClients() {
@@ -41,20 +40,14 @@ public record ClientService(ClientRepository clientRepository, EventPublisher ev
         }
         catch (Exception ex) {
             System.err.print(
-                    "Error trying to delete Client with ID: " + id + ex.getMessage());
+                "Error trying to delete Client with ID: " + id + " " +  ex.getMessage());
         }
     }
-
 
     //Update client from ID
     public void updateClient(Client client) {
         try {
-            if (clientRepository.existsById(client.getId())){
-                clientRepository.save(client);
-            }
-            else {
-                System.err.println("The client does not exist");
-            }
+            clientRepository.save(client);
         }
         catch (Exception ex) {
             System.err.println(

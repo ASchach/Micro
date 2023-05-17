@@ -1,14 +1,14 @@
-package com.example.kafka;
+package com.example.infrastructure;
 
-import com.example.Client;
-import com.example.ClientService;
+import com.example.domain.Client;
+import com.example.domain.ClientService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaConsumer {
 
-    private final ClientService clientService;
+    ClientService clientService;
 
     public KafkaConsumer(ClientService clientService) {
         this.clientService = clientService;

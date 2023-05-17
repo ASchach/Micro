@@ -1,5 +1,6 @@
-package com.example.kafka;
+package com.example.domain.event;
 
+import com.example.infrastructure.KafkaProducer;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

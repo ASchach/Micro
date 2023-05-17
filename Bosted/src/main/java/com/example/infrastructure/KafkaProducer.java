@@ -1,6 +1,6 @@
-package com.example.kafka;
+package com.example.infrastructure;
 
-import com.example.Client;
+import com.example.domain.Client;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
