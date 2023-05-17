@@ -1,10 +1,9 @@
 package com.example;
 
-import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.protocol.types.Field;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.*;
 
+import com.example.kafka.EventPublisher;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
@@ -12,21 +11,22 @@ import java.util.List;
 @Slf4j
 public class ClientController {
 
-    //ClientService object
+    private final EventPublisher eventPublisher;
     private final ClientService clientService;
 
     //Constructor
-    public ClientController(ClientService clientService) {
+    public ClientController(EventPublisher eventPublisher, ClientService clientService) {
+        this.eventPublisher = eventPublisher;
         this.clientService = clientService;
     }
 
-    //POST method for creating clients
+    //POST method for creating clients, invokes creation of event
     @CrossOrigin()
     @PostMapping()
     public void registerClient(@RequestBody
        ClientRegistrationRequest clientRegistrationRequest) {
         log.info("new client registration {}", clientRegistrationRequest);
-        clientService.registerClient(clientRegistrationRequest);
+        eventPublisher.publishClientRegisteredEvent(clientRegistrationRequest);
     }
 
     //GET method for gathering all clients
@@ -41,7 +41,7 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public void deleteClient(@PathVariable int id) {
         log.info("delete client with id {}", id);
-        clientService.deleteClient(id);
+        eventPublisher.publishClientDeletionEvent(id);
     }
 
     //PUT method for updating a given client based on ID

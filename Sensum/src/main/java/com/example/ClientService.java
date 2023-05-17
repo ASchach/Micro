@@ -1,15 +1,15 @@
 package com.example;
 
-import org.springframework.kafka.core.KafkaTemplate;
+import com.example.kafka.EventPublisher;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 
 @Service
-public record ClientService(ClientRepository clientRepository) {
+public record ClientService(ClientRepository clientRepository, EventPublisher eventPublisher) {
 
-    static KafkaTemplate<Integer, Client> kafkaTemplate;
+
 
     //Create client
     public void registerClient(ClientRegistrationRequest clientRegistrationRequest) {
@@ -22,8 +22,7 @@ public record ClientService(ClientRepository clientRepository) {
                     .birthYear(clientRegistrationRequest.birthYear())
                     .build();
             clientRepository.save(client);
-            kafkaTemplate.send("postClient", client);
-
+            eventPublisher.publishClientRegisteredEvent(client);
         }
         catch (Exception ex) {
             System.err.println("Error trying to register client: " + ex.getMessage());

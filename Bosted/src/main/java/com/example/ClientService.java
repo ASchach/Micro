@@ -1,43 +1,24 @@
 package com.example;
 
-import org.springframework.kafka.core.KafkaTemplate;
+import com.example.kafka.EventPublisher;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
 
-
-
 @Service
-public class ClientService {
+public record ClientService(ClientRepository clientRepository, EventPublisher eventPublisher) {
 
-    public ClientService(ClientRepository clientRepository, KafkaTemplate<Integer, Client> kafkaTemplate) {
-        this.clientRepository = clientRepository;
-        this.kafkaTemplate = kafkaTemplate;
-    }
-
-    ClientRepository clientRepository;
-    KafkaTemplate<Integer, Client> kafkaTemplate;
 
 
     //Create client
-    public void registerClient(ClientRegistrationRequest clientRegistrationRequest) {
+    public void registerClient(Client client) {
         try {
-            Client client = Client.builder()
-                    .cpr(clientRegistrationRequest.cpr())
-                    .firstName(clientRegistrationRequest.firstName())
-                    .lastName(clientRegistrationRequest.lastName())
-                    .address(clientRegistrationRequest.address())
-                    .birthYear(clientRegistrationRequest.birthYear())
-                    .build();
             clientRepository.save(client);
-            kafkaTemplate.send("postClient", client);
-
         }
         catch (Exception ex) {
             System.err.println("Error trying to register client: " + ex.getMessage());
         }
-        //todo: poll database for Client by ID, if sucessfull: publish to kafka
     }
 
 
@@ -49,8 +30,10 @@ public class ClientService {
     //Delete a client from ID
     public void deleteClient(int id)  {
         try {
-            if (clientRepository.findAll().contains(clientRepository.getReferenceById(id))){
+            System.out.println("check if exists" + clientRepository.existsById(id));
+            if (clientRepository.existsById(id)){
                 clientRepository.deleteById(id);
+                System.out.println("Client deleted with id: " + id);
             }
             else {
                 System.err.println("Client not found with ID: " + id);
