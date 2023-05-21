@@ -6,6 +6,8 @@ import com.example.presentation.ClientUpdateRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+
 @Component
 public class EventPublisher {
     private final ApplicationEventPublisher eventPublisher;
@@ -28,8 +30,8 @@ public class EventPublisher {
     }
 
     //ClientDeletion-event publisher
-    public void publishClientDeletionEvent(int id){
-        ClientDeletionEvent event = new ClientDeletionEvent(id);
+    public void publishClientDeletionEvent(BigInteger cpr){
+        ClientDeletionEvent event = new ClientDeletionEvent(cpr);
         eventPublisher.publishEvent(event);
     }
 
@@ -37,7 +39,6 @@ public class EventPublisher {
     public void publishClientUpdateEvent(ClientUpdateRequest clientUpdateRequest) {
         ClientUpdateEvent event = new ClientUpdateEvent(
                 Client.builder()
-                        .id(clientUpdateRequest.id())
                         .cpr(clientUpdateRequest.cpr())
                         .firstName(clientUpdateRequest.firstName())
                         .lastName(clientUpdateRequest.lastName())

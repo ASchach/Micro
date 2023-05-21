@@ -7,6 +7,7 @@ import com.example.domain.event.EventPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @RestController
@@ -41,18 +42,18 @@ public class ClientController {
 
     //DELETE method by ID for specific client
     @CrossOrigin()
-    @DeleteMapping("/{id}")
-    public void deleteClient(@PathVariable int id) {
-        log.info("Request received to delete client with id: " + id);
-        eventPublisher.publishClientDeletionEvent(id);
+    @DeleteMapping("/{cpr}")
+    public void deleteClient(@PathVariable BigInteger cpr) {
+        log.info("Request received to delete client with CPR: " + cpr);
+        eventPublisher.publishClientDeletionEvent(cpr);
     }
 
     //PUT method for updating a given client based on ID
     @CrossOrigin()
-    @PutMapping("/{id}")
-    public void updateClient(@PathVariable int id,
-         @RequestBody ClientUpdateRequest clientUpdateRequest) {
-        log.info("Request received to update client with id: " + id);
+    @PutMapping("/{cpr}")
+    public void updateClient(@PathVariable BigInteger cpr,
+                             @RequestBody ClientUpdateRequest clientUpdateRequest) {
+        log.info("Request received to update client with CPR: " + cpr);
         eventPublisher.publishClientUpdateEvent(clientUpdateRequest);
     }
 

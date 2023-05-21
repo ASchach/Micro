@@ -16,14 +16,13 @@ public class ClientListener {
     //ClientRegistrationEvent
     @EventListener
     public void handleRegisteredEvent(ClientRegistrationEvent clientRegistrationEvent){
-        System.out.println("Listener received: " + clientRegistrationEvent.client());
         kafkaProducer.postClient(clientRegistrationEvent.client());
     }
 
     //ClientDeletionEvent
     @EventListener
     public void handleDeletionEvent(ClientDeletionEvent clientDeletionEvent){
-        kafkaProducer.deleteClient(clientDeletionEvent.id);
+        kafkaProducer.deleteClient(clientDeletionEvent.cpr);
     }
 
     //ClientUpdateEvent

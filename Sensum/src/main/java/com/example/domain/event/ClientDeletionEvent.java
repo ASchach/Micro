@@ -1,9 +1,11 @@
 package com.example.domain.event;
 
-public class ClientDeletionEvent {
-    int id;
+import java.math.BigInteger;
 
-    public ClientDeletionEvent(int id) {
-        this.id = id;
+public class ClientDeletionEvent {
+    BigInteger cpr;
+
+    public ClientDeletionEvent(BigInteger cpr) {
+        this.cpr = cpr;
     }
 }

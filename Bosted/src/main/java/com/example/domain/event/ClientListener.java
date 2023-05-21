@@ -22,7 +22,7 @@ public class ClientListener {
     //ClientDeletionEvent
     @EventListener
     public void handleDeletionEvent(ClientDeletionEvent clientDeletionEvent){
-        kafkaProducer.deleteClient(clientDeletionEvent.id);
+        kafkaProducer.deleteClient(clientDeletionEvent.cpr);
     }
 
     //ClientUpdateEvent

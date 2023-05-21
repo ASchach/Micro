@@ -4,15 +4,17 @@ import com.example.domain.Client;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+
 @Component
 public class KafkaProducer {
 
     private final KafkaTemplate<String, Client> kafkaTemplate;
 
-    private final KafkaTemplate<String, Integer> kafkaTemplate2;
+    private final KafkaTemplate<Object, BigInteger> kafkaTemplate2;
 
     //Constructor
-    public KafkaProducer(KafkaTemplate<String, Client> kafkaTemplate, KafkaTemplate<String, Integer> kafkaTemplate2) {
+    public KafkaProducer(KafkaTemplate<String, Client> kafkaTemplate, KafkaTemplate<Object, BigInteger> kafkaTemplate2) {
         this.kafkaTemplate = kafkaTemplate;
         this.kafkaTemplate2 = kafkaTemplate2;
     }
@@ -23,8 +25,8 @@ public class KafkaProducer {
     }
 
     //Kafka producer for "deleteClient" topic
-    public void deleteClient(int id){
-        kafkaTemplate2.send("deleteClient", id);
+    public void deleteClient(BigInteger cpr){
+        kafkaTemplate2.send("deleteClient", cpr);
     }
 
     //Kafka producer for "updateClient" topic
