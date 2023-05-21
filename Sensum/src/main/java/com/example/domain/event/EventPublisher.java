@@ -21,15 +21,19 @@ public class EventPublisher {
     public void publishClientRegisteredEvent(ClientRegistrationRequest clientRegistrationRequest) {
         if (String.valueOf(clientRegistrationRequest.cpr()).length() == 10){
             if (String.valueOf(clientRegistrationRequest.birthYear()).length() == 4){
-                ClientRegistrationEvent event = new ClientRegistrationEvent(
-                        Client.builder()
-                                .cpr(clientRegistrationRequest.cpr())
-                                .firstName(clientRegistrationRequest.firstName())
-                                .lastName(clientRegistrationRequest.lastName())
-                                .address(clientRegistrationRequest.address())
-                                .birthYear(clientRegistrationRequest.birthYear())
-                                .build());
-                eventPublisher.publishEvent(event);
+                if (clientRegistrationRequest.firstName()!= null
+                        && clientRegistrationRequest.lastName() != null){
+                    ClientRegistrationEvent event = new ClientRegistrationEvent(
+                            Client.builder()
+                                    .cpr(clientRegistrationRequest.cpr())
+                                    .firstName(clientRegistrationRequest.firstName())
+                                    .lastName(clientRegistrationRequest.lastName())
+                                    .address(clientRegistrationRequest.address())
+                                    .birthYear(clientRegistrationRequest.birthYear())
+                                    .build());
+                    eventPublisher.publishEvent(event);
+                }
+                else {System.err.println("First name & last name must not be null");}
             }
             else {System.err.println("Year of birth must contain 4 digits");}
         }
@@ -46,6 +50,8 @@ public class EventPublisher {
     //ClientUpdate-event publisher
     public void publishClientUpdateEvent(ClientUpdateRequest clientUpdateRequest, BigInteger cpr) {
         if (Objects.equals(clientUpdateRequest.cpr(), cpr)){
+            if (clientUpdateRequest.firstName()!= null
+                    && clientUpdateRequest.lastName() != null){
             ClientUpdateEvent event = new ClientUpdateEvent(
                     Client.builder()
                             .cpr(clientUpdateRequest.cpr())
@@ -55,6 +61,8 @@ public class EventPublisher {
                             .birthYear(clientUpdateRequest.birthYear())
                             .build());
             eventPublisher.publishEvent(event);
+            }
+            else {System.err.println("First name & last name must not be null");}
         }
         else {System.err.println("Illegal action: change CPR from: " + cpr + "to: " + clientUpdateRequest.cpr());}
     }
