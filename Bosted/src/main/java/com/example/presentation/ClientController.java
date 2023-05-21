@@ -54,7 +54,7 @@ public class ClientController {
     public void updateClient(@PathVariable BigInteger cpr,
          @RequestBody ClientUpdateRequest clientUpdateRequest) {
         log.info("Request received to update client with CPR: " + cpr);
-        eventPublisher.publishClientUpdateEvent(clientUpdateRequest);
+        eventPublisher.publishClientUpdateEvent(clientUpdateRequest, cpr);
     }
 
 }
