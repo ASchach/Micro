@@ -1,8 +1,9 @@
-package com.example;
+package com.example.presentation;
 
 import java.math.BigInteger;
 
-public record ClientRegistrationRequest(
+public record ClientUpdateRequest(
+        Integer id,
         BigInteger cpr,
         String firstName,
         String lastName,

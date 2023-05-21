@@ -16,6 +16,7 @@ public class ClientListener {
     //ClientRegistrationEvent
     @EventListener
     public void handleRegisteredEvent(ClientRegistrationEvent clientRegistrationEvent){
+        System.out.println("Listener received: " + clientRegistrationEvent.client());
         kafkaProducer.postClient(clientRegistrationEvent.client());
     }
 

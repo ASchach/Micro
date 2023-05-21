@@ -12,7 +12,6 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic postTopic(){
         return TopicBuilder.name("postClient")
-                .partitions(2)
                 .replicas(2)
                 .build();
     }
@@ -21,7 +20,6 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic updateTopic(){
         return TopicBuilder.name("updateClient")
-                .partitions(2)
                 .replicas(2)
                 .build();
     }
@@ -30,7 +28,6 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic deleteTopic(){
         return TopicBuilder.name("deleteClient")
-                .partitions(2)
                 .replicas(2)
                 .build();
     }

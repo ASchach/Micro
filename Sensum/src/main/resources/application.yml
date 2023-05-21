@@ -10,7 +10,10 @@ Spring:
     consumer:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.example"
+        spring:
+          json:
+            trusted:
+              packages: "*"
 
   datasource:
     username: 'root'
@@ -24,4 +27,4 @@ Spring:
     hibernate:
       ddl-auto: update
 
-    show-sql: 'true'
+    show-sql: 'false'

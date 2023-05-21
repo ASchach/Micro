@@ -1,22 +1,16 @@
 version: '3'
 
 services:
-  bosted-db:
-    image: mysql:latest
+
+  frontend:
+    image: "frontend-image:latest"
+    build:
+      context: ./angular-bootstrap
+      dockerfile: Dockerfile
     ports:
-      - "33061:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=bostedpassword
-      - MYSQL_DATABASE=bostedDB
-      - MYSQL_USER=bosteduser
-      - MYSQL_PASSWORD=bostedpassword
-    healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u bosteduser -pbostedpassword" ]
-      interval: 15s
-      timeout: 10s
-      retries: 5
+      - "4200:4200"
     networks:
-      bosted-network:
+      - frontend-network
 
   bosted:
     image: "bosted-image:latest"
@@ -34,25 +28,26 @@ services:
       - SPRING_DATASOURCE_PASSWORD=bostedpassword
       - KAFKA_OPTS=-Dspring.kafka.consumer.properties.spring.json.trusted.packages=com.example
     networks:
-      - zookeeper-kafka
+      - frontend-network
       - bosted-network
+      - kafka-bosted
 
-  sensum-db:
+  bosted-db:
     image: mysql:latest
     ports:
-      - "3307:3306"
+      - "33061:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=sensumpassword
-      - MYSQL_DATABASE=sensumDB
-      - MYSQL_USER=sensumuser
-      - MYSQL_PASSWORD=sensumpassword
+      - MYSQL_ROOT_PASSWORD=bostedpassword
+      - MYSQL_DATABASE=bostedDB
+      - MYSQL_USER=bosteduser
+      - MYSQL_PASSWORD=bostedpassword
     healthcheck:
-      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u sensumuser -psensumpassword" ]
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u bosteduser -pbostedpassword" ]
       interval: 15s
       timeout: 10s
       retries: 5
     networks:
-      - sensum-network
+      - bosted-network
 
   sensum:
     image: "sensum-image:latest"
@@ -68,6 +63,25 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://sensum-db:3306/sensumDB
       - SPRING_DATASOURCE_USERNAME=sensumuser
       - SPRING_DATASOURCE_PASSWORD=sensumpassword
+    networks:
+      - sensum-network
+      - frontend-network
+      - kafka-sensum
+
+  sensum-db:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=sensumpassword
+      - MYSQL_DATABASE=sensumDB
+      - MYSQL_USER=sensumuser
+      - MYSQL_PASSWORD=sensumpassword
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -u sensumuser -psensumpassword" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
     networks:
       - sensum-network
 
@@ -99,8 +113,8 @@ services:
       - zookeeper
     networks:
       - zookeeper-kafka
-      - sensum-network
-      - bosted-network
+      - kafka-sensum
+      - kafka-bosted
 
   kafka-server2:
     image: 'bitnami/kafka:2.8.0'
@@ -119,8 +133,8 @@ services:
       - zookeeper
     networks:
       - zookeeper-kafka
-      - sensum-network
-      - bosted-network
+      - kafka-sensum
+      - kafka-bosted
 
   kafka:
     image: "kafka-image:latest"
@@ -133,9 +147,8 @@ services:
       - kafka-server1
       - kafka-server2
     networks:
-      - zookeeper-kafka
-      - sensum-network
-      - bosted-network
+      - kafka-bosted
+      - kafka-sensum
 
 
 volumes:
@@ -148,6 +161,9 @@ volumes:
 
 
 networks:
-  zookeeper-kafka:
+  frontend-network:
   bosted-network:
   sensum-network:
+  zookeeper-kafka:
+  kafka-sensum:
+  kafka-bosted:

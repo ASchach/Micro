@@ -3,8 +3,8 @@ package com.example.domain;
 import com.example.domain.event.EventPublisher;
 import com.example.persistence.ClientRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public record ClientService(ClientRepository clientRepository, EventPublisher eventPublisher) {
@@ -35,6 +35,7 @@ public record ClientService(ClientRepository clientRepository, EventPublisher ev
     //Delete a client from ID
     public void deleteClient(int id)  {
         try {
+            System.out.println("check if exists" + clientRepository.existsById(id));
             if (clientRepository.existsById(id)){
                 clientRepository.deleteById(id);
                 System.out.println("Client deleted with id: " + id);
@@ -52,12 +53,13 @@ public record ClientService(ClientRepository clientRepository, EventPublisher ev
     //Update client from ID
     public void updateClient(Client client) {
         try {
-            for (int i = 0; i < clientRepository.findAll().size()+1 ; i++) {
-                if (Objects.equals(clientRepository.findAll().get(i).getCpr(),
-                        client.getCpr())){
-                    clientRepository.save(client);
-                }
+            if(clientRepository.existsById(client.getId())){
+                clientRepository.save(client);
             }
+            else{
+                System.err.println("Error trying to find client with ID: " + client.getId());
+            }
+
         }
         catch (Exception ex) {
             System.err.println(

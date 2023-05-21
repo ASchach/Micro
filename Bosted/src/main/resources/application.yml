@@ -14,6 +14,7 @@ Spring:
           json:
             trusted:
               packages: "*"
+
   datasource:
     username: 'root'
     url: jdbc:mysql://localhost:33061/bostedDB
@@ -26,4 +27,4 @@ Spring:
     hibernate:
       ddl-auto: update
 
-    show-sql: 'true'
+    show-sql: 'false'
