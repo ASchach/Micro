@@ -1,7 +1,0 @@
-server:
-  port: 7070
-Spring:
-  application:
-    name: Kafka
-  kafka:
-    bootstrap-servers: kafka-server1:9092, kafka-server2:9093
